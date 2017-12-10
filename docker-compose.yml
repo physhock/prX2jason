@@ -1,0 +1,7 @@
+version: '3'
+services:
+   formatter:
+     build: .
+     ports:
+       - "8000:80"
+     restart: always

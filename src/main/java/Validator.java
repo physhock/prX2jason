@@ -32,7 +32,7 @@ public class Validator implements Server {
             } catch (JsonSyntaxException e) {
                 String[] errorSplittedString = e.getMessage().split(".+: | at ");
                 jsonResponse = builder.toJson(
-                        new JsonError(
+                        new JaEr(
                                 e.hashCode(),
                                 errorSplittedString[1],
                                 "at " + errorSplittedString[2],

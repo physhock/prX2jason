@@ -4,8 +4,8 @@ The JSON Validation Service (JVS) is a validator that allows every users to chec
 
 ## Start  
 
-1. Build:  `docker build -t validator github.com/physhock/prX2jason`
-2. Run: `docker run -t --rm -p 80:80 validator`
+1. Build image:  `./gradlew docker`
+2. Run: `docker run -t --rm -p 80:80 validator:0.1`
 3. Send json: `curl -s --upload-file new.json http://localhost/`
 
 ## Handling the Responses  

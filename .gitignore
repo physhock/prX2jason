@@ -1,4 +1,10 @@
-.idea/
+.gradle
+build/
+lib/
+web/
+.idea
 target/
-*.iml
-.gitingore
+.build.gradle.swp
+
+gradle-app.setting
+!gradle-wrapper.jar

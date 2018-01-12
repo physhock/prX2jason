@@ -1,44 +1,49 @@
 apply plugin: 'java'
 apply plugin: 'maven'
-
+apply plugin: 'docker'
 
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        jcenter();
     }
     dependencies {
-        classpath 'com.bmuschko:gradle-docker-plugin:3.2.1'
-        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.17.2"
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
 
-group = 'TRPO'
 version = '0.1'
-
-description = """"""
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Version': version,
+                'Main-Class': 'Validator'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 docker {
-    name "${jar.baseName}"
-    files 'build/libs'
-    buildArgs(['JAR_FILE': "${jar.archiveName}"])
+    baseImage = 'openjdk:8'
 }
 
-jar {
-    baseName = 'validator'
-    version =  '0.1'
-    archiveName = 'validator-0.1.jar'
+task docker(type: Docker) {
+    dependsOn "fatJar"
+    applicationName = "validator"
+    setEnvironment("SERVER_PORT", "80")
+    exposePort(80)
+    addFile('build/libs/validator-all-0.1.jar','vol/validator-all-0.1.jar')
+    defaultCommand =  ['java', "-jar", "vol/validator-all-0.1.jar"]
+
 }
+
 repositories {
-
+        
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {

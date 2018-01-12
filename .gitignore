@@ -4,6 +4,7 @@ lib/
 web/
 .idea
 target/
+.build.gradle.swp
 
 gradle-app.setting
 !gradle-wrapper.jar
